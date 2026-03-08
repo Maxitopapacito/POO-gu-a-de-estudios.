@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>POO C# — Guía de Estudio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-top:    #0b1a3e;
+    --bg-mid:    #0d2151;
+    --bg-bot:    #091630;
+    --glass:     rgba(255,255,255,0.06);
+    --glass-border: rgba(255,255,255,0.12);
+    --glass-hover:  rgba(255,255,255,0.10);
+    --accent:    #60a5fa;
+    --accent2:   #f472b6;
+    --accent3:   #34d399;
+    --warn:      #fb923c;
+    --text:      #e2eaf8;
+    --muted:     #7e9ac4;
+    --code-bg:   rgba(0,0,10,0.35);
+    --radius:    12px;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    background:
+      radial-gradient(ellipse at 20% 0%,   #1a3a7a 0%, transparent 55%),
+      radial-gradient(ellipse at 80% 30%,  #0f2d6b 0%, transparent 50%),
+      radial-gradient(ellipse at 50% 100%, #071228 0%, transparent 60%),
+      linear-gradient(160deg, var(--bg-top) 0%, var(--bg-mid) 45%, var(--bg-bot) 100%);
+    background-attachment: fixed;
+    color: var(--text);
+    font-family: 'Outfit', sans-serif;
+    font-size: 15.5px;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 200;
+    background: rgba(10, 22, 55, 0.72);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--glass-border);
+    padding: 0.9rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .logo {
+    font-size: 1.25rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: var(--text);
+  }
+  .logo span { color: var(--accent); }
+
+  nav { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+  nav button {
+    background: transparent;
+    border: 1px solid var(--glass-border);
+    color: var(--muted);
+    padding: 0.38rem 0.95rem;
+    border-radius: 8px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.18s;
+    letter-spacing: 0.01em;
+  }
+  nav button:hover { border-color: var(--accent); color: var(--accent); background: rgba(96,165,250,0.08); }
+  nav button.active {
+    background: rgba(96,165,250,0.18);
+    border-color: var(--accent);
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  /* ── LAYOUT ── */
+  .section { display: none; padding: 2.5rem 2rem; max-width: 920px; margin: 0 auto; }
+  .section.active { display: block; animation: fadeUp 0.3s ease; }
+  @keyframes fadeUp { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+
+  /* ── TYPOGRAPHY ── */
+  h2 {
+    font-size: 1.75rem;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    color: var(--text);
+    margin-bottom: 1.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .section-num {
+    font-size: 0.68rem;
+    font-weight: 700;
+    font-family: 'JetBrains Mono', monospace;
+    background: var(--accent);
+    color: #06174a;
+    padding: 3px 9px;
+    border-radius: 5px;
+    letter-spacing: 0.05em;
+  }
+  h3 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--accent);
+    margin: 2.2rem 0 0.85rem;
+    letter-spacing: -0.01em;
+  }
+  p { color: var(--muted); margin-bottom: 0.9rem; }
+  strong { color: var(--text); font-weight: 600; }
+
+  /* ── GLASS CARD ── */
+  .card {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius);
+    padding: 1.5rem 1.75rem;
+    margin-bottom: 1.4rem;
+    backdrop-filter: blur(8px);
+  }
+  .card-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.8rem;
+  }
+
+  /* ── CODE ── */
+  pre {
+    background: var(--code-bg);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 9px;
+    padding: 1.2rem 1.4rem;
+    overflow-x: auto;
+    margin: 1rem 0;
+    backdrop-filter: blur(4px);
+  }
+  code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    line-height: 1.85;
+    color: #bfd3f2;
+  }
+  .kw   { color: #f472b6; }
+  .cls  { color: #93c5fd; }
+  .str  { color: #86efac; }
+  .num  { color: #fcd34d; }
+  .cmt  { color: #3d5a85; font-style: italic; }
+  .prop { color: #67e8f9; }
+  .met  { color: #c4b5fd; }
+  .ic {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    background: rgba(96,165,250,0.12);
+    border: 1px solid rgba(96,165,250,0.25);
+    color: #93c5fd;
+    padding: 1px 6px;
+    border-radius: 4px;
+  }
+
+  /* ── TABLE ── */
+  .table-wrap { overflow-x: auto; margin: 1rem 0; border-radius: 9px; border: 1px solid var(--glass-border); }
+  table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+  th {
+    background: rgba(96,165,250,0.1);
+    color: var(--accent);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    padding: 0.7rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--glass-border);
+  }
+  td { padding: 0.65rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.05); color: var(--muted); vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: rgba(255,255,255,0.02); }
+
+  /* ── NOTES ── */
+  .note {
+    border-left: 3px solid var(--accent3);
+    background: rgba(52,211,153,0.07);
+    padding: 0.85rem 1.1rem;
+    border-radius: 0 8px 8px 0;
+    margin: 1rem 0;
+    font-size: 0.9rem;
+    color: var(--muted);
+  }
+  .note.warn { border-color: var(--warn); background: rgba(251,146,60,0.07); }
+  .note.info { border-color: var(--accent); background: rgba(96,165,250,0.07); }
+  .note.danger { border-color: var(--accent2); background: rgba(244,114,182,0.07); }
+
+  /* ── BADGES ── */
+  .badge {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.62rem;
+    padding: 2px 7px;
+    border-radius: 20px;
+    border: 1px solid;
+    margin: 1px 2px;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+  }
+  .badge.simple { color: var(--accent3);  border-color: var(--accent3);  background: rgba(52,211,153,0.1); }
+  .badge.inter  { color: var(--accent2);  border-color: var(--accent2);  background: rgba(244,114,182,0.1); }
+  .badge.dto    { color: var(--accent);   border-color: var(--accent);   background: rgba(96,165,250,0.1); }
+  .badge.cont   { color: #fcd34d;         border-color: #fcd34d;         background: rgba(252,211,77,0.1); }
+
+  /* ── STEPS ── */
+  .step-item {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    padding: 1rem 1.2rem;
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 10px;
+    margin-bottom: 0.75rem;
+    backdrop-filter: blur(6px);
+  }
+  .step-num {
+    background: linear-gradient(135deg, var(--accent), #3b82f6);
+    color: #fff;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    font-weight: 700;
+    width: 27px; height: 27px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; margin-top: 2px;
+  }
+  .step-content strong { color: var(--text); display: block; margin-bottom: 0.15rem; font-weight: 600; }
+  .step-content span { color: var(--muted); font-size: 0.87rem; }
+
+  /* ── DIVIDER ── */
+  .divider { height: 1px; background: linear-gradient(90deg, var(--glass-border), transparent); margin: 2.2rem 0; }
+
+  /* ── ERROR PAIR ── */
+  .error-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.2rem; }
+  @media(max-width:600px) { .error-pair { grid-template-columns: 1fr; } }
+  .error-box { border-radius: 10px; padding: 1rem 1.1rem; border: 1px solid; backdrop-filter: blur(6px); }
+  .error-box.bad  { border-color: rgba(244,114,182,0.35); background: rgba(244,114,182,0.06); }
+  .error-box.good { border-color: rgba(52,211,153,0.35);  background: rgba(52,211,153,0.06); }
+  .error-box .elabel { font-family:'JetBrains Mono',monospace; font-size:0.65rem; letter-spacing:0.08em; text-transform:uppercase; font-weight:700; margin-bottom:0.5rem; }
+  .error-box.bad  .elabel { color: var(--accent2); }
+  .error-box.good .elabel { color: var(--accent3); }
+  .error-box pre { margin: 0.5rem 0 0; }
+
+  /* ══════════════════════════════════════
+     FLASHCARDS
+  ══════════════════════════════════════ */
+  .fc-toolbar { display:flex; gap:0.6rem; flex-wrap:wrap; margin-bottom:1.75rem; }
+
+  .btn {
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 600;
+    padding: 0.5rem 1.1rem;
+    border-radius: 8px;
+    border: 1px solid;
+    cursor: pointer;
+    transition: all 0.16s;
+    background: transparent;
+  }
+  .btn-blue   { border-color: var(--accent); color: var(--accent); }
+  .btn-blue:hover   { background: rgba(96,165,250,0.15); }
+  .btn-blue.filled  { background: rgba(96,165,250,0.18); }
+  .btn-ghost  { border-color: var(--glass-border); color: var(--muted); }
+  .btn-ghost:hover  { border-color: var(--accent); color: var(--accent); }
+  .btn-pink   { border-color: var(--accent2); color: var(--accent2); }
+  .btn-pink:hover   { background: rgba(244,114,182,0.12); }
+  .btn-green  { border-color: var(--accent3); color: #06174a; background: var(--accent3); }
+  .btn-green:hover  { opacity: 0.88; }
+
+  /* mode tabs */
+  .mode-tabs { display:flex; gap:0.4rem; margin-bottom:1.4rem; }
+  .mode-tab {
+    font-family:'Outfit',sans-serif; font-size:0.8rem; font-weight:600;
+    padding:0.38rem 0.9rem; border-radius:7px; border:1px solid var(--glass-border);
+    color:var(--muted); cursor:pointer; transition:all 0.15s; background:transparent;
+  }
+  .mode-tab:hover { border-color:var(--accent); color:var(--accent); }
+  .mode-tab.active { background:rgba(96,165,250,0.15); border-color:var(--accent); color:var(--accent); }
+
+  #fc-status {
+    font-family:'JetBrains Mono',monospace; font-size:0.75rem; color:var(--muted);
+    margin-bottom:1.2rem; display:flex; gap:1.2rem; flex-wrap:wrap;
+  }
+  .st-ok  { color: var(--accent3); }
+  .st-bad { color: var(--accent2); }
+
+  .progress-wrap { background:rgba(255,255,255,0.07); border-radius:4px; height:3px; margin-bottom:1.75rem; }
+  .progress-fill { height:3px; background:linear-gradient(90deg,var(--accent),var(--accent3)); border-radius:4px; transition:width 0.4s ease; }
+
+  /* ── FLASHCARD ── */
+  .flashcard {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 14px;
+    padding: 2rem 2.2rem;
+    min-height: 260px;
+    display: flex; flex-direction: column; justify-content: space-between;
+    backdrop-filter: blur(12px);
+    transition: border-color 0.2s;
+    cursor: pointer;
+    user-select: none;
+    position: relative;
+  }
+  .flashcard:hover:not(.revealed) { border-color: rgba(96,165,250,0.4); }
+  .flashcard.revealed { border-color: rgba(52,211,153,0.4); cursor:default; }
+
+  .fc-meta { display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem; }
+  .fc-cat {
+    font-family:'JetBrains Mono',monospace; font-size:0.65rem;
+    color: var(--muted); letter-spacing:0.07em; text-transform:uppercase;
+    background: rgba(255,255,255,0.06); padding: 3px 8px; border-radius:4px;
+  }
+  .fc-num { font-family:'JetBrains Mono',monospace; font-size:0.7rem; color:var(--muted); }
+  .fc-q { font-size:1.05rem; font-weight:600; color:var(--text); line-height:1.55; }
+  .fc-hint { font-family:'JetBrains Mono',monospace; font-size:0.7rem; color:rgba(126,154,196,0.5); margin-top:1.5rem; }
+
+  .fc-answer {
+    display:none; margin-top:1.4rem; padding-top:1.4rem;
+    border-top:1px solid var(--glass-border);
+    animation: fadeUp 0.22s ease;
+  }
+  .fc-answer.show { display:block; }
+  .fc-answer-label { font-family:'JetBrains Mono',monospace; font-size:0.62rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--accent3); margin-bottom:0.55rem; }
+  .fc-answer-text { color:var(--text); font-size:0.93rem; line-height:1.65; }
+
+  .fc-vote { display:none; gap:0.75rem; margin-top:1.6rem; }
+  .fc-vote.show { display:flex; }
+  .btn-wrong2 {
+    flex:1; font-family:'Outfit',sans-serif; font-size:0.82rem; font-weight:700;
+    padding:0.75rem; border-radius:9px; border:1px solid rgba(244,114,182,0.5);
+    color:var(--accent2); background:rgba(244,114,182,0.07); cursor:pointer; transition:all 0.15s;
+  }
+  .btn-wrong2:hover { background:rgba(244,114,182,0.18); }
+  .btn-right2 {
+    flex:1; font-family:'Outfit',sans-serif; font-size:0.82rem; font-weight:700;
+    padding:0.75rem; border-radius:9px; border:1px solid rgba(52,211,153,0.5);
+    color:var(--accent3); background:rgba(52,211,153,0.07); cursor:pointer; transition:all 0.15s;
+  }
+  .btn-right2:hover { background:rgba(52,211,153,0.18); }
+
+  /* ── QUIZ MODE ── */
+  .quiz-card {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 14px;
+    padding: 2rem 2.2rem;
+    backdrop-filter: blur(12px);
+  }
+  .quiz-q { font-size:1.05rem; font-weight:600; color:var(--text); line-height:1.55; margin-bottom:1.6rem; }
+  .quiz-options { display:grid; grid-template-columns:1fr 1fr; gap:0.75rem; }
+  @media(max-width:560px) { .quiz-options { grid-template-columns:1fr; } }
+  .quiz-opt {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--glass-border);
+    border-radius: 9px;
+    padding: 0.9rem 1.1rem;
+    cursor: pointer;
+    transition: all 0.16s;
+    display: flex; align-items: flex-start; gap: 0.75rem;
+    font-size: 0.9rem; color: var(--muted); text-align:left;
+    font-family: 'Outfit', sans-serif;
+    line-height: 1.5;
+  }
+  .quiz-opt:hover:not(.locked) { border-color: var(--accent); color: var(--text); background: rgba(96,165,250,0.08); }
+  .quiz-opt.correct { border-color: var(--accent3); background: rgba(52,211,153,0.12); color: var(--accent3); }
+  .quiz-opt.wrong   { border-color: var(--accent2); background: rgba(244,114,182,0.10); color: var(--accent2); }
+  .quiz-opt.reveal-correct { border-color: var(--accent3); background: rgba(52,211,153,0.08); color: var(--accent3); }
+  .opt-letter {
+    font-family:'JetBrains Mono',monospace; font-size:0.7rem; font-weight:700;
+    min-width:22px; height:22px; border-radius:5px; background:rgba(255,255,255,0.08);
+    display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px;
+  }
+  .quiz-feedback {
+    margin-top:1.2rem; padding:0.85rem 1rem; border-radius:8px;
+    font-size:0.88rem; font-weight:500; display:none;
+  }
+  .quiz-feedback.ok   { background:rgba(52,211,153,0.1); border:1px solid rgba(52,211,153,0.3); color:var(--accent3); display:block; }
+  .quiz-feedback.fail { background:rgba(244,114,182,0.1); border:1px solid rgba(244,114,182,0.3); color:var(--accent2); display:block; }
+  .quiz-next { margin-top:1.2rem; display:none; }
+  .quiz-next.show { display:block; }
+
+  /* ── RESULTS ── */
+  #fc-results {
+    display:none; text-align:center; padding:2rem 1rem;
+    background:var(--glass); border:1px solid var(--glass-border);
+    border-radius:14px; backdrop-filter:blur(10px);
+  }
+  #fc-results h3 { font-size:1.8rem; font-weight:800; margin-bottom:0.4rem; }
+  .score-circle {
+    width:110px; height:110px; border-radius:50%; border:5px solid;
+    display:flex; align-items:center; justify-content:center;
+    margin:1.4rem auto; font-family:'JetBrains Mono',monospace;
+    font-size:1.5rem; font-weight:700;
+  }
+  .score-circle.great { border-color:var(--accent3); color:var(--accent3); }
+  .score-circle.mid   { border-color:#fcd34d;        color:#fcd34d; }
+  .score-circle.low   { border-color:var(--accent2);  color:var(--accent2); }
+  #missed-list { text-align:left; margin-top:1.8rem; }
+  #missed-list h4 { font-family:'JetBrains Mono',monospace; font-size:0.68rem; text-transform:uppercase; letter-spacing:0.07em; color:var(--accent2); margin-bottom:0.8rem; }
+  .missed-pill {
+    background:rgba(244,114,182,0.07); border:1px solid rgba(244,114,182,0.2);
+    border-radius:8px; padding:0.65rem 0.9rem; margin-bottom:0.5rem;
+    font-size:0.85rem; color:var(--muted);
+  }
+  .missed-pill strong { color:var(--text); display:block; font-size:0.8rem; margin-bottom:0.1rem; }
+  .results-btns { display:flex; gap:0.7rem; justify-content:center; flex-wrap:wrap; margin-top:1.8rem; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">POO <span>C#</span></div>
+  <nav>
+    <button class="active" onclick="showSec('patrones')">Patrones</button>
+    <button onclick="showSec('metodos')">Métodos</button>
+    <button onclick="showSec('errores')">Errores</button>
+    <button onclick="showSec('proyectos')">Proyectos</button>
+    <button onclick="showSec('flashcards')">Flashcards</button>
+  </nav>
+</header>
+
+<!-- ══ PATRONES ══════════════════════════════════════════════════ -->
+<section id="patrones" class="section active">
+  <h2><span class="section-num">01</span> Los 5 Patrones del Profe</h2>
+
+  <div class="card">
+    <div class="card-label">Patrón 1 — Clase Simple e Inmutable <span class="badge simple">SIMPLE</span></div>
+    <p>Todas las propiedades son de <strong>solo lectura</strong> (<code class="ic">get</code> sin <code class="ic">set</code>). Todo valor se asigna únicamente en el constructor.</p>
+    <div class="note warn">Si alguien puede escribir <code class="ic">consola.Id = 99</code> desde fuera, rompes toda la lógica del programa.</div>
+    <pre><code><span class="kw">public class</span> <span class="cls">Consola</span>
+{
+    <span class="kw">public int</span>    <span class="prop">Id</span>          { <span class="kw">get</span>; }   <span class="cmt">// sin set = solo lectura</span>
+    <span class="kw">public string</span> <span class="prop">Descripcion</span> { <span class="kw">get</span>; }
+
+    <span class="kw">public</span> <span class="met">Consola</span>(<span class="kw">int</span> id, <span class="kw">string</span> descripcion)
+    {
+        <span class="prop">Id</span> = id;
+        <span class="prop">Descripcion</span> = descripcion;
+    }
+}</code></pre>
+    <p>Mismo patrón: <code class="ic">Day</code>, <code class="ic">Time</code>, <code class="ic">Genre</code>, <code class="ic">Patient</code>, <code class="ic">Renta</code>, <code class="ic">Videojuego</code>…</p>
+  </div>
+
+  <div class="card">
+    <div class="card-label">Patrón 1b — Propiedad Calculada</div>
+    <p>Definida con <code class="ic">=&gt;</code>. No guarda valor en memoria — lo calcula al vuelo cada vez que se accede.</p>
+    <pre><code><span class="kw">public string</span> <span class="prop">FullName</span> =&gt; $<span class="str">"{LastName}, {FirstName}"</span>;
+<span class="cmt">// No hay campo, no hay set. Se recalcula en cada acceso.</span></code></pre>
+  </div>
+
+  <div class="card">
+    <div class="card-label">Patrón 2 — Tabla Intermedia <span class="badge inter">INTERMEDIA</span></div>
+    <p>Relaciona entidades usando <strong>solo IDs</strong>, como una tabla relacional. No guarda objetos completos.</p>
+    <div class="table-wrap">
+      <table>
+        <tr><th>Proyecto</th><th>Clase</th><th>Qué relaciona</th></tr>
+        <tr><td>DentalCare</td><td><code class="ic">Appointment</code></td><td>patientId + dayId + timeId</td></tr>
+        <tr><td>Prueba_xd</td><td><code class="ic">Catalogo</code></td><td>clienteId + consolaId + videoJuegoId</td></tr>
+        <tr><td>Renta Videojuegos</td><td><code class="ic">RentaVideojuego</code></td><td>folio + consolaId + videojuegoId</td></tr>
+      </table>
+    </div>
+    <pre><code><span class="kw">public class</span> <span class="cls">RentaVideojuego</span>
+{
+    <span class="kw">public int</span> <span class="prop">Folio</span>        { <span class="kw">get</span>; }
+    <span class="kw">public int</span> <span class="prop">ConsolaId</span>    { <span class="kw">get</span>; }
+    <span class="kw">public int</span> <span class="prop">VideojuegoId</span> { <span class="kw">get</span>; }
+
+    <span class="kw">public</span> <span class="met">RentaVideojuego</span>(<span class="kw">int</span> folio, <span class="kw">int</span> consolaId, <span class="kw">int</span> videojuegoId)
+    { <span class="prop">Folio</span>=folio; <span class="prop">ConsolaId</span>=consolaId; <span class="prop">VideojuegoId</span>=videojuegoId; }
+}</code></pre>
+  </div>
+
+  <div class="card">
+    <div class="card-label">Patrón 3 — DTO <span class="badge dto">DTO</span></div>
+    <p>Agrupa <strong>objetos completos</strong> de distintas listas para mostrarlos juntos. No hace lógica, solo transporta.</p>
+    <div class="table-wrap">
+      <table>
+        <tr><th>Proyecto</th><th>DTO</th><th>Contiene</th></tr>
+        <tr><td>DentalCare</td><td><code class="ic">FullAppointment</code></td><td>Patient + Day + Time</td></tr>
+        <tr><td>PelisPro</td><td><code class="ic">FullMovie</code></td><td>Movie + Genre + Review</td></tr>
+        <tr><td>PelisPro</td><td><code class="ic">MovieAverage</code></td><td>Movie + Genre + double Average</td></tr>
+      </table>
+    </div>
+    <pre><code><span class="kw">public class</span> <span class="cls">FullAppointment</span>
+{
+    <span class="kw">public</span> <span class="cls">Patient</span> <span class="prop">Patient</span> { <span class="kw">get</span>; }
+    <span class="kw">public</span> <span class="cls">Day</span>     <span class="prop">Day</span>     { <span class="kw">get</span>; }
+    <span class="kw">public</span> <span class="cls">Time</span>    <span class="prop">Time</span>    { <span class="kw">get</span>; }
+
+    <span class="kw">public</span> <span class="met">FullAppointment</span>(<span class="cls">Patient</span> patient, <span class="cls">Day</span> day, <span class="cls">Time</span> time)
+    { <span class="prop">Patient</span>=patient; <span class="prop">Day</span>=day; <span class="prop">Time</span>=time; }
+}</code></pre>
+  </div>
+
+  <div class="card">
+    <div class="card-label">Patrón 4 — Clase Contenedora <span class="badge cont">CONTENEDORA</span></div>
+    <p>Maneja <strong>todas</strong> las listas. Nunca las expone directamente. Devuelve copias. Métodos <code class="ic">internal</code>.</p>
+    <pre><code><span class="kw">public class</span> <span class="cls">VideoClub</span>
+{
+    <span class="kw">private</span> <span class="cls">List</span>&lt;<span class="cls">Renta</span>&gt;           <span class="prop">rentas</span>;
+    <span class="kw">private</span> <span class="cls">List</span>&lt;<span class="cls">Consola</span>&gt;         <span class="prop">consolas</span>;
+    <span class="kw">private</span> <span class="cls">List</span>&lt;<span class="cls">Videojuego</span>&gt;      <span class="prop">videojuegos</span>;
+    <span class="kw">private</span> <span class="cls">List</span>&lt;<span class="cls">RentaVideojuego</span>&gt; <span class="prop">rentaVideojuegos</span>;
+
+    <span class="kw">internal bool</span> <span class="met">ValidarID</span>(<span class="kw">int</span> folio)
+        =&gt; <span class="prop">rentas</span>.<span class="met">Exists</span>(r =&gt; r.<span class="prop">Folio</span> == folio);
+
+    <span class="kw">internal</span> <span class="cls">List</span>&lt;<span class="cls">Consola</span>&gt; <span class="met">ConsolasDisponibles</span>()
+        =&gt; <span class="kw">new</span> <span class="cls">List</span>&lt;<span class="cls">Consola</span>&gt;(<span class="prop">consolas</span>);  <span class="cmt">// COPIA, no la privada</span>
+}</code></pre>
+  </div>
+
+  <div class="card">
+    <div class="card-label">Patrón 5 — Sort con Lambda</div>
+    <pre><code><span class="cmt">// Ascendente (a antes de b)</span>
+appointments.<span class="met">Sort</span>((a1,a2) =&gt; a1.<span class="prop">Patient</span>.<span class="prop">FullName</span>.<span class="met">CompareTo</span>(a2.<span class="prop">Patient</span>.<span class="prop">FullName</span>));
+
+<span class="cmt">// Descendente (b antes de a)</span>
+result.<span class="met">Sort</span>((a,b) =&gt; b.<span class="prop">Average</span>.<span class="met">CompareTo</span>(a.<span class="prop">Average</span>));
+
+<span class="cmt">// Doble criterio</span>
+appointments.<span class="met">Sort</span>((a1,a2) =&gt; {
+    <span class="kw">int</span> cmp = a1.<span class="prop">Day</span>.<span class="prop">Id</span>.<span class="met">CompareTo</span>(a2.<span class="prop">Day</span>.<span class="prop">Id</span>);
+    <span class="kw">if</span> (cmp != <span class="num">0</span>) <span class="kw">return</span> cmp;
+    <span class="kw">return</span> a1.<span class="prop">Time</span>.<span class="prop">Id</span>.<span class="met">CompareTo</span>(a2.<span class="prop">Time</span>.<span class="prop">Id</span>);
+});</code></pre>
+  </div>
+
+  <h3>Flujo de Trabajo en Examen</h3>
+  <div>
+    <div class="step-item"><div class="step-num">1</div><div class="step-content"><strong>Clases de datos simples</strong><span>Inmutables, una por entidad: <code class="ic">Renta</code>, <code class="ic">Consola</code>, <code class="ic">Videojuego</code>…</span></div></div>
+    <div class="step-item"><div class="step-num">2</div><div class="step-content"><strong>Tabla(s) intermedia(s)</strong><span>Si hay relaciones entre entidades: <code class="ic">RentaVideojuego</code>, <code class="ic">Appointment</code>…</span></div></div>
+    <div class="step-item"><div class="step-num">3</div><div class="step-content"><strong>DTOs si se necesitan</strong><span>Solo si hay que mostrar datos de múltiples listas juntos.</span></div></div>
+    <div class="step-item"><div class="step-num">4</div><div class="step-content"><strong>Escribir Program primero</strong><span>Como si los métodos de la contenedora ya existieran.</span></div></div>
+    <div class="step-item"><div class="step-num">5</div><div class="step-content"><strong>Implementar la contenedora</strong><span>Los métodos exactos que se usaron en Program.</span></div></div>
+  </div>
+</section>
+
+<!-- ══ MÉTODOS ═══════════════════════════════════════════════════ -->
+<section id="metodos" class="section">
+  <h2><span class="section-num">02</span> Métodos de Lista</h2>
+
+  <div class="card">
+    <div class="card-label">Exists · Find · FindAll</div>
+    <div class="table-wrap">
+      <table>
+        <tr><th>Método</th><th>Devuelve</th><th>Cuándo usarlo</th></tr>
+        <tr><td><code class="ic">Exists(λ)</code></td><td><strong>bool</strong></td><td>¿Hay alguno que cumpla?</td></tr>
+        <tr><td><code class="ic">Find(λ)</code></td><td>objeto o <code class="ic">null</code></td><td>Dame el primero que cumpla</td></tr>
+        <tr><td><code class="ic">FindAll(λ)</code></td><td><code class="ic">List&lt;T&gt;</code></td><td>Dame todos los que cumplan</td></tr>
+      </table>
+    </div>
+    <pre><code>rentas.<span class="met">Exists</span>(r =&gt; r.<span class="prop">Folio</span> == nuevoFolio);        <span class="cmt">// → bool</span>
+
+<span class="cls">Videojuego</span> v = videojuegos.<span class="met">Find</span>(j =&gt; j.<span class="prop">Id</span> == id); <span class="cmt">// puede ser null</span>
+<span class="kw">if</span> (v != <span class="kw">null</span>) resultados.<span class="met">Add</span>(v);
+
+<span class="cls">List</span>&lt;<span class="cls">RentaVideojuego</span>&gt; rentados =
+    rentaVideojuegos.<span class="met">FindAll</span>(r =&gt; r.<span class="prop">Folio</span> == folio); <span class="cmt">// → List</span></code></pre>
+  </div>
+
+  <div class="card">
+    <div class="card-label">Filtrado doble con continue — VideojuegosDisponibles</div>
+    <pre><code><span class="kw">internal</span> <span class="cls">List</span>&lt;<span class="cls">Videojuego</span>&gt; <span class="met">VideojuegosDisponibles</span>(<span class="kw">int</span> consolaId, <span class="kw">int</span> folio)
+{
+    <span class="cls">List</span>&lt;<span class="cls">Videojuego</span>&gt; resultados = <span class="kw">new</span> <span class="cls">List</span>&lt;<span class="cls">Videojuego</span>&gt;();
+    <span class="cls">List</span>&lt;<span class="cls">RentaVideojuego</span>&gt; rentados =
+        rentaVideojuegos.<span class="met">FindAll</span>(r =&gt; r.<span class="prop">Folio</span> == folio);
+
+    <span class="kw">foreach</span> (<span class="kw">var</span> vj <span class="kw">in</span> videojuegos)
+    {
+        <span class="kw">if</span> (vj.<span class="prop">ConsolaId</span> != consolaId)                       <span class="kw">continue</span>; <span class="cmt">// filtro 1</span>
+        <span class="kw">if</span> (rentados.<span class="met">Exists</span>(r =&gt; r.<span class="prop">VideojuegoId</span> == vj.<span class="prop">Id</span>)) <span class="kw">continue</span>; <span class="cmt">// filtro 2</span>
+        resultados.<span class="met">Add</span>(vj);
+    }
+    <span class="kw">return</span> resultados;
+}</code></pre>
+  </div>
+
+  <div class="card">
+    <div class="card-label">Filtrado por tabla intermedia — GetAvailableDays (DentalCare)</div>
+    <pre><code><span class="kw">public</span> <span class="cls">List</span>&lt;<span class="cls">Day</span>&gt; <span class="met">GetAvailableDays</span>()
+{
+    <span class="cmt">// 1. Horarios sin cita aún</span>
+    <span class="cls">List</span>&lt;<span class="cls">Schedule</span>&gt; free = schedules.<span class="met">FindAll</span>(s =&gt;
+        !appointments.<span class="met">Exists</span>(a =&gt; a.<span class="prop">DayId</span>==s.<span class="prop">DayId</span> &amp;&amp; a.<span class="prop">TimeId</span>==s.<span class="prop">TimeId</span>));
+
+    <span class="cmt">// 2. Días que tienen al menos un horario libre</span>
+    <span class="cls">List</span>&lt;<span class="cls">Day</span>&gt; days = <span class="kw">new</span> <span class="cls">List</span>&lt;<span class="cls">Day</span>&gt;();
+    <span class="kw">foreach</span> (<span class="cls">Day</span> day <span class="kw">in</span> <span class="kw">this</span>.days)
+        <span class="kw">if</span> (free.<span class="met">Exists</span>(s =&gt; s.<span class="prop">DayId</span> == day.<span class="prop">Id</span>)) days.<span class="met">Add</span>(day);
+    <span class="kw">return</span> days;
+}</code></pre>
+  </div>
+
+  <div class="card">
+    <div class="card-label">Construir DTOs desde varias listas — GetCitasPorPaciente</div>
+    <pre><code><span class="kw">public</span> <span class="cls">List</span>&lt;<span class="cls">FullAppointment</span>&gt; <span class="met">GetCitasPorPaciente</span>()
+{
+    <span class="kw">var</span> result = <span class="kw">new</span> <span class="cls">List</span>&lt;<span class="cls">FullAppointment</span>&gt;();
+    <span class="kw">foreach</span> (<span class="kw">var</span> a <span class="kw">in</span> appointments)
+    {
+        <span class="cls">Patient</span> p = patients.<span class="met">Find</span>(x =&gt; x.<span class="prop">Id</span> == a.<span class="prop">PatientId</span>);
+        <span class="cls">Day</span>     d = days.<span class="met">Find</span>(x =&gt; x.<span class="prop">Id</span> == a.<span class="prop">DayId</span>);
+        <span class="cls">Time</span>    t = times.<span class="met">Find</span>(x =&gt; x.<span class="prop">Id</span> == a.<span class="prop">TimeId</span>);
+        result.<span class="met">Add</span>(<span class="kw">new</span> <span class="cls">FullAppointment</span>(p, d, t));
+    }
+    result.<span class="met">Sort</span>((a1,a2) =&gt; a1.<span class="prop">Patient</span>.<span class="prop">FullName</span>.<span class="met">CompareTo</span>(a2.<span class="prop">Patient</span>.<span class="prop">FullName</span>));
+    <span class="kw">return</span> result;
+}</code></pre>
+  </div>
+</section>
+
+<!-- ══ ERRORES ════════════════════════════════════════════════════ -->
+<section id="errores" class="section">
+  <h2><span class="section-num">03</span> Errores Comunes</h2>
+
+  <h3>Error 1 — Variable local que tapa al campo de clase</h3>
+  <div class="error-pair">
+    <div class="error-box bad"><div class="elabel">❌ Mal</div>
+      <pre><code><span class="kw">internal</span> <span class="cls">List</span>&lt;<span class="cls">Consola</span>&gt; <span class="met">Disponibles</span>()
+{
+    <span class="cmt">// VACÍA — tapa this.consolas</span>
+    <span class="cls">List</span>&lt;<span class="cls">Consola</span>&gt; consolas =
+        <span class="kw">new</span> <span class="cls">List</span>&lt;<span class="cls">Consola</span>&gt;();
+    <span class="kw">foreach</span> (<span class="kw">var</span> c <span class="kw">in</span> consolas) <span class="cmt">// itera vacía</span>
+    { ... }
+}</code></pre>
+    </div>
+    <div class="error-box good"><div class="elabel">✓ Bien</div>
+      <pre><code><span class="kw">internal</span> <span class="cls">List</span>&lt;<span class="cls">Consola</span>&gt; <span class="met">Disponibles</span>()
+{
+    <span class="cmt">// Copia de this.consolas</span>
+    <span class="kw">return new</span> <span class="cls">List</span>&lt;<span class="cls">Consola</span>&gt;(consolas);
+}</code></pre>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+  <h3>Error 2 — while vacío</h3>
+  <div class="error-pair">
+    <div class="error-box bad"><div class="elabel">❌ Mal</div>
+      <pre><code>switch (option) { ... }
+<span class="kw">while</span> (option != <span class="num">0</span>); <span class="cmt">// ← el ; lo termina</span></code></pre>
+    </div>
+    <div class="error-box good"><div class="elabel">✓ Bien</div>
+      <pre><code><span class="kw">do</span>
+{
+    <span class="cmt">// menú completo aquí</span>
+    switch (option) { ... }
+} <span class="kw">while</span> (option != <span class="num">0</span>);</code></pre>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+  <h3>Error 3 — static dentro de Main</h3>
+  <div class="error-pair">
+    <div class="error-box bad"><div class="elabel">❌ Mal — no compila</div>
+      <pre><code><span class="kw">static void</span> <span class="met">Main</span>(<span class="kw">string</span>[] args)
+{
+    <span class="kw">static</span> <span class="cls">VideoClub</span> club = <span class="kw">new</span> <span class="cls">VideoClub</span>();
+}</code></pre>
+    </div>
+    <div class="error-box good"><div class="elabel">✓ Bien — nivel de clase</div>
+      <pre><code><span class="kw">internal class</span> <span class="cls">Program</span>
+{
+    <span class="kw">static</span> <span class="cls">VideoClub</span> videoclub = <span class="kw">new</span> <span class="cls">VideoClub</span>();
+    <span class="kw">static void</span> <span class="met">Main</span>(<span class="kw">string</span>[] args) { ... }
+}</code></pre>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+  <h3>Error 4 — List con paréntesis en vez de llaves</h3>
+  <div class="error-pair">
+    <div class="error-box bad"><div class="elabel">❌ Mal</div>
+      <pre><code>rentas = <span class="kw">new</span> <span class="cls">List</span>&lt;<span class="cls">Renta</span>&gt;(
+    <span class="kw">new</span> <span class="cls">Renta</span>(<span class="num">001</span>, <span class="str">"Juan"</span>) <span class="cmt">// error</span>
+);</code></pre>
+    </div>
+    <div class="error-box good"><div class="elabel">✓ Bien</div>
+      <pre><code>rentas = <span class="kw">new</span> <span class="cls">List</span>&lt;<span class="cls">Renta</span>&gt;()
+{
+    <span class="kw">new</span> <span class="cls">Renta</span>(<span class="num">001</span>, <span class="str">"Juan"</span>),
+    <span class="kw">new</span> <span class="cls">Renta</span>(<span class="num">002</span>, <span class="str">"Valentina"</span>)
+};</code></pre>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+  <h3>Convenciones de Nombres</h3>
+  <div class="card">
+    <div class="table-wrap">
+      <table>
+        <tr><th>Elemento</th><th>Convención</th><th>Ejemplo</th></tr>
+        <tr><td>Clases</td><td><code class="ic">PascalCase</code></td><td><code class="ic">VideoClub</code>, <code class="ic">RentaVideojuego</code></td></tr>
+        <tr><td>Propiedades</td><td><code class="ic">PascalCase</code></td><td><code class="ic">ConsolaId</code>, <code class="ic">FullName</code></td></tr>
+        <tr><td>Métodos</td><td><code class="ic">PascalCase</code></td><td><code class="ic">ValidarID()</code>, <code class="ic">GetAvailableDays()</code></td></tr>
+        <tr><td>Variables locales</td><td><code class="ic">camelCase</code></td><td><code class="ic">nuevoFolio</code>, <code class="ic">selectedConsole</code></td></tr>
+        <tr><td>Campos privados</td><td><code class="ic">camelCase</code></td><td><code class="ic">rentas</code>, <code class="ic">videojuegos</code></td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ══ PROYECTOS ══════════════════════════════════════════════════ -->
+<section id="proyectos" class="section">
+  <h2><span class="section-num">04</span> Análisis de Proyectos</h2>
+
+  <h3>DentalCare</h3>
+  <div class="card">
+    <div class="table-wrap"><table>
+      <tr><th>Clase</th><th>Tipo</th><th>Rol</th></tr>
+      <tr><td><code class="ic">Patient</code></td><td><span class="badge simple">SIMPLE</span></td><td>Con <code class="ic">FullName</code> calculado</td></tr>
+      <tr><td><code class="ic">Day</code>, <code class="ic">Time</code></td><td><span class="badge simple">SIMPLE</span></td><td>Catálogos de días y horas</td></tr>
+      <tr><td><code class="ic">Schedule</code></td><td><span class="badge inter">INTERMEDIA</span></td><td>Qué día tiene qué horario disponible</td></tr>
+      <tr><td><code class="ic">Appointment</code></td><td><span class="badge inter">INTERMEDIA</span></td><td>Cita agendada: paciente + día + hora</td></tr>
+      <tr><td><code class="ic">FullAppointment</code></td><td><span class="badge dto">DTO</span></td><td>Agrupa Patient + Day + Time para pantalla</td></tr>
+      <tr><td><code class="ic">Agenda</code></td><td><span class="badge cont">CONTENEDORA</span></td><td>Todas las listas y métodos internal</td></tr>
+    </table></div>
+  </div>
+
+  <h3>PelisPro</h3>
+  <div class="card">
+    <div class="table-wrap"><table>
+      <tr><th>Clase</th><th>Tipo</th><th>Detalle</th></tr>
+      <tr><td><code class="ic">Movie</code>, <code class="ic">Genre</code></td><td><span class="badge simple">SIMPLE</span></td><td>Datos base</td></tr>
+      <tr><td><code class="ic">Review</code></td><td><span class="badge simple">SIMPLE</span></td><td>Tiene <code class="ic">MovieID</code> pero también datos propios (no es tabla intermedia pura)</td></tr>
+      <tr><td><code class="ic">FullMovie</code></td><td><span class="badge dto">DTO</span></td><td>Movie + Genre + Review</td></tr>
+      <tr><td><code class="ic">MovieAverage</code></td><td><span class="badge dto">DTO</span></td><td>Movie + Genre + promedio calculado</td></tr>
+      <tr><td><code class="ic">Colección</code></td><td><span class="badge cont">CONTENEDORA</span></td><td>Todas las listas</td></tr>
+    </table></div>
+  </div>
+
+  <h3>Renta de Videojuegos — CierreDeRenta paso a paso</h3>
+  <div>
+    <div class="step-item"><div class="step-num">1</div><div class="step-content"><strong>Validar folio</strong><span><code class="ic">ValidarID(folio)</code> — si no existe, return</span></div></div>
+    <div class="step-item"><div class="step-num">2</div><div class="step-content"><strong>Obtener consolas del cliente</strong><span><code class="ic">ConsolasCliente(folio)</code> — consolas en las que tiene juegos rentados</span></div></div>
+    <div class="step-item"><div class="step-num">3</div><div class="step-content"><strong>Por cada consola, obtener sus juegos</strong><span><code class="ic">VideojuegosCliente(folio, consola.Id)</code> — ordenados por título</span></div></div>
+    <div class="step-item"><div class="step-num">4</div><div class="step-content"><strong>Acumular total en Program</strong><span><code class="ic">total += v.Precio</code> dentro del foreach — no hay método separado necesariamente</span></div></div>
+  </div>
+</section>
+
+<!-- ══ FLASHCARDS ═════════════════════════════════════════════════ -->
+<section id="flashcards" class="section">
+  <h2><span class="section-num">05</span> Flashcards</h2>
+
+  <div class="mode-tabs">
+    <button class="mode-tab active" id="tab-classic" onclick="setMode('classic')">Modo Clásico</button>
+    <button class="mode-tab" id="tab-quiz" onclick="setMode('quiz')">Modo Quiz (A B C D)</button>
+  </div>
+
+  <div class="fc-toolbar">
+    <button class="btn btn-blue" onclick="startSession('all')">▶ Empezar</button>
+    <button class="btn btn-ghost" onclick="shuffleAll()">⇄ Mezclar</button>
+    <button class="btn btn-pink" id="btn-retry" style="display:none" onclick="startSession('missed')">⚡ Repetir falladas</button>
+  </div>
+
+  <div id="fc-status"></div>
+  <div class="progress-wrap" id="prog-wrap" style="display:none">
+    <div class="progress-fill" id="prog-fill" style="width:0%"></div>
+  </div>
+
+  <div id="fc-arena">
+    <div style="text-align:center;padding:4rem 2rem;color:var(--muted)">
+      <div style="font-size:2.8rem;margin-bottom:1rem">🃏</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:0.82rem">
+        Elige un modo y presiona <strong style="color:var(--accent)">Empezar</strong>
+      </div>
+    </div>
+  </div>
+
+  <div id="fc-results"></div>
+</section>
+
+<script>
+// ═══ DATA ══════════════════════════════════════════════════════════
+const CARDS = [
+  { cat:"Patrones", q:"¿Qué característica define a una clase simple e inmutable?",
+    a:"Todas sus propiedades tienen solo `get` (sin `set`) y se asignan únicamente en el constructor. Una vez creado el objeto, ningún valor puede cambiar.",
+    wrong:["Puede tener setters privados pero no públicos","Las propiedades se pueden modificar solo desde dentro de la clase","Requiere que todas las propiedades sean static"] },
+
+  { cat:"Patrones", q:"¿Cuál es la diferencia entre una propiedad calculada (=>) y una normal ({ get; })?",
+    a:"La calculada no guarda ningún valor en memoria: lo computa al vuelo cada vez que se accede. `FullName => $\"{LastName}, {FirstName}\"` no tiene campo de respaldo.",
+    wrong:["La calculada es más lenta porque usa reflexión","La calculada requiere un campo privado de respaldo","No hay diferencia real, solo es azúcar sintáctica"] },
+
+  { cat:"Patrones", q:"¿Qué guarda una tabla intermedia y qué NO debe guardar?",
+    a:"Solo guarda IDs (int) para relacionar entidades. NO debe guardar objetos completos. RentaVideojuego guarda Folio, ConsolaId y VideojuegoId — no el objeto Consola ni Videojuego.",
+    wrong:["Puede guardar objetos completos si se necesitan para mayor eficiencia","Guarda solo strings con los nombres de las entidades","Guarda una lista de objetos de cada entidad relacionada"] },
+
+  { cat:"Patrones", q:"¿Para qué sirve un DTO y en qué se diferencia de una tabla intermedia?",
+    a:"El DTO agrupa objetos completos de distintas listas para mostrarlos juntos en pantalla. La tabla intermedia solo relaciona IDs. FullAppointment(Patient, Day, Time) es un DTO.",
+    wrong:["El DTO también guarda solo IDs, igual que la tabla intermedia","El DTO contiene lógica de negocio y la tabla intermedia no","No hay diferencia, son el mismo patrón con distintos nombres"] },
+
+  { cat:"Patrones", q:"¿Por qué los métodos de la contenedora son `internal` y no `public`?",
+    a:"Porque solo los usa Program del mismo proyecto. `internal` restringe el acceso al mismo ensamblado. No hay razón para exponerlos a proyectos externos.",
+    wrong:["Porque internal hace que sean más rápidos en ejecución","Por convención estética, pero funcionaría igual con public","Porque internal permite que sean llamados desde clases abstractas"] },
+
+  { cat:"Patrones", q:"¿Por qué ConsolasDisponibles() devuelve `new List<Consola>(consolas)` en vez de `consolas` directamente?",
+    a:"Para devolver una COPIA. Si devolviera la lista privada, desde Program podrían hacer consolas.Add(...) o consolas.Clear() y corromper el estado interno de la contenedora.",
+    wrong:["Para que la lista resultante esté ordenada automáticamente","Es solo un requisito del compilador para listas privadas","Para convertir la lista a un tipo compatible con Program"] },
+
+  { cat:"Sort", q:"¿Cómo ordenas una lista de FullAppointment de menor a mayor por Time.Id?",
+    a:"appointments.Sort((a1, a2) => a1.Time.Id.CompareTo(a2.Time.Id));\nEl primer parámetro antes que el segundo = ascendente.",
+    wrong:["appointments.Sort((a1, a2) => a2.Time.Id.CompareTo(a1.Time.Id));","appointments.OrderBy(a => a.Time.Id);","appointments.Sort(a => a.Time.Id);"] },
+
+  { cat:"Sort", q:"¿Cómo inviertes el orden de un Sort para que quede descendente?",
+    a:"Inviertes a y b: `result.Sort((a, b) => b.Average.CompareTo(a.Average));`\nAl poner b primero, el de mayor valor queda primero.",
+    wrong:["Agregas `.Reverse()` al final del Sort","Usas `CompareTo` con signo negativo: `-a.Average.CompareTo(b.Average)`","No es posible con Sort(), necesitas LINQ OrderByDescending"] },
+
+  { cat:"Métodos de Lista", q:"¿Qué devuelven Exists, Find y FindAll respectivamente?",
+    a:"Exists → bool (¿hay alguno?)  |  Find → un objeto o null (el primero)  |  FindAll → List<T> (todos los que cumplan)",
+    wrong:["Exists → int, Find → bool, FindAll → objeto único","Los tres devuelven bool pero con distintas sobrecargas","Exists → List, Find → bool, FindAll → objeto o null"] },
+
+  { cat:"Métodos de Lista", q:"¿Por qué siempre se verifica `if (v != null)` después de Find?",
+    a:"Porque Find devuelve null si ningún elemento cumple la condición. Usar el objeto sin verificar provoca NullReferenceException.",
+    wrong:["Es solo una buena práctica opcional, no lanza excepción","Find lanza KeyNotFoundException si no encuentra, no devuelve null","Solo es necesario si la lista puede estar vacía"] },
+
+  { cat:"Métodos de Lista", q:"¿Qué hace `continue` dentro de un foreach y cuándo lo usa el profe?",
+    a:"Salta inmediatamente al siguiente elemento del ciclo sin ejecutar el resto del bloque. El profe lo usa para filtros negativos: si el elemento NO cumple, se omite.",
+    wrong:["Detiene el foreach completamente, igual que break","Reinicia el foreach desde el primer elemento","Marca el elemento actual para ser eliminado de la lista"] },
+
+  { cat:"Errores", q:"Una variable local tiene el mismo nombre que un campo privado. ¿Qué ocurre?",
+    a:"La variable local 'tapa' al campo de clase. Dentro del método, el nombre hace referencia a la local (vacía), no al campo. El foreach itera sobre cero elementos.",
+    wrong:["C# lanza un error de compilación por nombre duplicado","El compilador elige automáticamente el campo de clase","Ocurre un stack overflow por referencia circular"] },
+
+  { cat:"Errores", q:"¿Qué hace el punto y coma en `while (option != 0);` después del switch?",
+    a:"El punto y coma es el cuerpo del while (vacío). El bucle verifica la condición pero no ejecuta nada. El menú nunca se repite. Se corrige con do { ... } while (...);",
+    wrong:["Hace que el while espere input del usuario antes de continuar","Es sintaxis válida que solo afecta el rendimiento","Convierte el while en un bucle infinito"] },
+
+  { cat:"Errores", q:"¿Dónde debe declararse `static VideoClub videoclub = new VideoClub()`?",
+    a:"A nivel de la clase Program, no dentro de Main. Las variables locales no pueden ser static. Así todos los métodos estáticos de Program pueden accederla.",
+    wrong:["Dentro de Main() como variable local sin static","En una clase separada llamada GlobalState","Como parámetro de Main(string[] args, VideoClub vc)"] },
+
+  { cat:"Diseño", q:"Te piden un sistema de préstamos de libros. Hay Libros, Autores y Usuarios. ¿Qué clases necesitas y de qué tipo?",
+    a:"Autor, Libro, Usuario → simples inmutables. Prestamo(userId, libroId) → tabla intermedia. FullPrestamo(Usuario, Libro, Autor) → DTO. Biblioteca → contenedora.",
+    wrong:["Solo necesitas Libro y Usuario, los autores van como string dentro de Libro","Necesitas una clase Prestamo que herede de Libro y de Usuario","Todo va dentro de una sola clase Biblioteca con métodos static"] },
+
+  { cat:"Proyectos", q:"En DentalCare, ¿qué hace GetAvailableDays() en dos pasos?",
+    a:"1. Filtra schedules que no tienen cita aún (!appointments.Exists(...))\n2. De todos los días, devuelve solo los que tienen al menos un schedule libre.",
+    wrong:["1. Ordena días por nombre. 2. Elimina los que ya pasaron","1. Cuenta las citas por día. 2. Devuelve los que tienen menos de 5","1. Obtiene todos los días. 2. Los filtra por la hora actual"] },
+
+  { cat:"Proyectos", q:"En PelisPro, ¿por qué GetMoviesPorTítulo puede agregar múltiples FullMovie de la misma película?",
+    a:"Porque una película puede tener varias reseñas. Se crea un FullMovie por cada Review. Si no tiene reseñas, crea uno con Review = null.",
+    wrong:["Por un bug que no fue corregido — debería retornar solo una por película","Porque las películas pueden estar en múltiples géneros a la vez","Para facilitar el ordenamiento posterior por rating"] },
+];
+
+// ═══ STATE ═════════════════════════════════════════════════════════
+let deck = [], missed = [], current = 0, correct = 0;
+let activeMode = 'classic'; // 'classic' | 'quiz'
+let sessionActive = false;
+
+function setMode(m) {
+  activeMode = m;
+  document.getElementById('tab-classic').classList.toggle('active', m==='classic');
+  document.getElementById('tab-quiz').classList.toggle('active', m==='quiz');
+  if (sessionActive) startSession('all');
+}
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]; }
+  return a;
+}
+
+function startSession(src) {
+  sessionActive = true;
+  deck = src==='missed' ? shuffle([...missed]) : shuffle([...CARDS]);
+  missed = []; current = 0; correct = 0;
+  document.getElementById('fc-results').style.display = 'none';
+  document.getElementById('prog-wrap').style.display = 'block';
+  updateStatus(); renderCurrent();
+}
+function shuffleAll() { startSession('all'); }
+
+function updateStatus() {
+  const total = deck.length, done = current;
+  document.getElementById('prog-fill').style.width = (total>0?done/total*100:0)+'%';
+  document.getElementById('fc-status').innerHTML =
+    `<span>${done}/${total}</span><span class="st-ok">✓ ${correct}</span><span class="st-bad">✗ ${missed.length}</span>`;
+}
+
+function renderCurrent() {
+  if (current >= deck.length) { showResults(); return; }
+  if (activeMode==='classic') renderClassic(deck[current]);
+  else renderQuiz(deck[current]);
+}
+
+// ─── CLASSIC ───────────────────────────────────────────────────────
+function renderClassic(card) {
+  const q = esc(card.q), a = esc(card.a);
+  document.getElementById('fc-arena').innerHTML = `
+    <div class="flashcard" id="thecard" onclick="revealClassic()">
+      <div>
+        <div class="fc-meta">
+          <span class="fc-cat">${esc(card.cat)}</span>
+          <span class="fc-num">${current+1} / ${deck.length}</span>
+        </div>
+        <div class="fc-q">${q.replace(/\n/g,'<br>')}</div>
+        <div class="fc-hint">↩ click para revelar</div>
+      </div>
+      <div class="fc-answer" id="fc-ans">
+        <div class="fc-answer-label">Respuesta</div>
+        <div class="fc-answer-text">${a.replace(/\n/g,'<br>')}</div>
+      </div>
+    </div>
+    <div class="fc-vote" id="fc-vote">
+      <button class="btn-wrong2" onclick="vote(false)">✗ Me equivoqué</button>
+      <button class="btn-right2" onclick="vote(true)">✓ Lo sabía</button>
+    </div>`;
+}
+function revealClassic() {
+  const card = document.getElementById('thecard');
+  if (!card || card.classList.contains('revealed')) return;
+  card.classList.add('revealed');
+  card.onclick = null;
+  document.getElementById('fc-ans').classList.add('show');
+  document.querySelector('.fc-hint').style.display='none';
+  document.getElementById('fc-vote').classList.add('show');
+}
+function vote(ok) {
+  if (ok) correct++; else missed.push(deck[current]);
+  current++; updateStatus(); renderCurrent();
+}
+
+// ─── QUIZ ──────────────────────────────────────────────────────────
+function renderQuiz(card) {
+  const opts = shuffle([card.a, ...card.wrong]);
+  const correctIdx = opts.indexOf(card.a);
+  const letters = ['A','B','C','D'];
+  const optsHtml = opts.map((o,i) => `
+    <button class="quiz-opt" id="opt${i}" onclick="selectQuiz(${i},${correctIdx})">
+      <span class="opt-letter">${letters[i]}</span>
+      <span>${esc(o).replace(/\n/g,'<br>')}</span>
+    </button>`).join('');
+
+  document.getElementById('fc-arena').innerHTML = `
+    <div class="quiz-card">
+      <div class="fc-meta" style="margin-bottom:1.2rem">
+        <span class="fc-cat">${esc(card.cat)}</span>
+        <span class="fc-num">${current+1} / ${deck.length}</span>
+      </div>
+      <div class="quiz-q">${esc(card.q).replace(/\n/g,'<br>')}</div>
+      <div class="quiz-options" id="quiz-opts">${optsHtml}</div>
+      <div class="quiz-feedback" id="quiz-fb"></div>
+      <div class="quiz-next" id="quiz-next">
+        <button class="btn btn-blue" onclick="nextQuiz()">Siguiente →</button>
+      </div>
+    </div>`;
+}
+
+function selectQuiz(chosen, correct_idx) {
+  const opts = document.querySelectorAll('.quiz-opt');
+  opts.forEach(o => o.classList.add('locked'));
+  opts.forEach(o => { o.onclick = null; });
+
+  const fb = document.getElementById('quiz-fb');
+  if (chosen === correct_idx) {
+    opts[chosen].classList.add('correct');
+    fb.className = 'quiz-feedback ok';
+    fb.textContent = '✓ Correcto';
+    correct++;
+  } else {
+    opts[chosen].classList.add('wrong');
+    opts[correct_idx].classList.add('reveal-correct');
+    fb.className = 'quiz-feedback fail';
+    fb.textContent = '✗ Incorrecto — la respuesta correcta está marcada en verde';
+    missed.push(deck[current]);
+  }
+  document.getElementById('quiz-next').classList.add('show');
+  updateStatus();
+}
+function nextQuiz() {
+  current++;
+  updateStatus();
+  renderCurrent();
+}
+
+// ─── RESULTS ───────────────────────────────────────────────────────
+function showResults() {
+  document.getElementById('fc-arena').innerHTML = '';
+  document.getElementById('prog-wrap').style.display = 'none';
+  const total = deck.length;
+  const pct = Math.round(correct/total*100);
+  const cls = pct>=80?'great':pct>=50?'mid':'low';
+  const title = pct===100?'🔥 Perfecto':pct>=70?'Muy bien':'A repasar';
+
+  const missedHtml = missed.length ? `
+    <div id="missed-list">
+      <h4>Falladas (${missed.length})</h4>
+      ${missed.map(c=>`<div class="missed-pill"><strong>${esc(c.cat)}</strong>${esc(c.q.split('\n')[0])}</div>`).join('')}
+    </div>` : '';
+
+  const retryBtn = missed.length
+    ? `<button class="btn btn-pink" onclick="startSession('missed')">⚡ Solo falladas</button>` : '';
+
+  document.getElementById('btn-retry').style.display = missed.length?'inline-flex':'none';
+
+  document.getElementById('fc-results').innerHTML = `
+    <h3>${title}</h3>
+    <div class="score-circle ${cls}">${pct}%</div>
+    <p style="color:var(--muted);font-size:0.9rem">${correct} de ${total} correctas · ${missed.length} para repasar</p>
+    ${missedHtml}
+    <div class="results-btns">
+      <button class="btn btn-blue" onclick="startSession('all')">▶ Repetir todas</button>
+      ${retryBtn}
+    </div>`;
+  document.getElementById('fc-results').style.display = 'block';
+
+  document.getElementById('fc-status').innerHTML =
+    `<span class="st-ok">✓ ${correct} correctas</span><span class="st-bad">✗ ${missed.length} falladas</span>`;
+}
+
+// ─── NAV ───────────────────────────────────────────────────────────
+function showSec(id) {
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  const ids = ['patrones','metodos','errores','proyectos','flashcards'];
+  document.querySelectorAll('nav button').forEach((b,i)=>b.classList.toggle('active',ids[i]===id));
+}
+
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+</script>
+</body>
+</html>
